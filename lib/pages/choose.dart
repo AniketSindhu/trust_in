@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trust_in/methods/googleauth.dart';
+import 'package:trust_in/pages/login.dart';
+import 'package:velocity_x/velocity_x.dart';
 class SelectRole extends StatefulWidget {
   @override
   _SelectRoleState createState() => _SelectRoleState();
@@ -17,6 +21,26 @@ class _SelectRoleState extends State<SelectRole> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GradientAppBar(
+        actions: <Widget>[
+          PopupMenuButton(
+            color: Colors.black38,
+            itemBuilder: (BuildContext context){
+              return[
+                PopupMenuItem(
+                  child: FlatButton(
+                    child: "Logout".text.make(),
+                    onPressed: ()async{
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                       prefs.clear();
+                       signOut();
+                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+                    }
+                  ),
+                ),
+              ];
+            },
+          )
+        ],
         centerTitle: true,
         title: Text("Select Your Role"),
         gradient: LinearGradient(

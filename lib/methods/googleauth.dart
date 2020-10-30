@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_in/methods/fireBaseAdd.dart';
 import 'package:trust_in/pages/choose.dart';
 import 'package:trust_in/pages/onboard.dart';
+import 'package:trust_in/pages/userInfo.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -46,8 +46,8 @@ Future<String> signInWithGoogle(BuildContext context) async {
   email = user.email;
   phoneNumber=user.phoneNumber;
   imageUrl=user.photoURL;
-  FirebaseAdd().addUser(name, email, phoneNumber, user.uid, imageUrl);
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return IntroScreen();}));
+  /* FirebaseAdd().addUser(name, email, phoneNumber, user.uid, imageUrl); */
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return DetailsForm();}));
   }  
   return 'signInWithGoogle succeeded: $user';
 }
