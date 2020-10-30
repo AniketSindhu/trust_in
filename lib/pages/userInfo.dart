@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trust_in/methods/fireBaseAdd.dart';
+import 'package:trust_in/pages/choose.dart';
 
 class DetailsForm extends StatefulWidget {
+  final String name;
+  final String email;
+  final String phoneNumber;
+  final String uid;
+  final String image;
+  DetailsForm({this.name,this.email,this.phoneNumber,this.uid,this.image});
+
   _DetailsFormState createState() => _DetailsFormState();
 }
 
@@ -201,7 +210,9 @@ class _DetailsFormState extends State<DetailsForm> {
                       annualFamilyIncome = int.parse(AnnualFamilyIncome);
                       loanAmount = int.parse(LoanAmount);
                       assets = int.parse(Assets);
-                      calculateScore();
+                      int tempScore = calculateScore();
+                      FirebaseAdd().addUser( widget.name, widget.email, widget.phoneNumber, widget.uid, widget.image, tempScore);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return SelectRole();}));
                   }
                 },
                 child: Text("Next"),

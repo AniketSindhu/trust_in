@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:trust_in/config/config.dart';
+import 'package:trust_in/methods/googleauth.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -42,13 +44,29 @@ class _LoginState extends State<Login> {
                   width: 350,
                 ),
               ),
-              //SignInButton(
-              //  Buttons.GoogleDark,
-              //  onPressed: () {
-              //    //Google Sign-in
-              //  },
-              //  text: 'Continue With Google',
-              //)
+              RaisedButton(
+                onPressed: (){
+                  signInWithGoogle(context);
+                },
+                padding: EdgeInsets.all(0.0),
+                shape:  StadiumBorder(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primary,
+                        AppColors.secondary
+                      ],
+                    ),
+                  ),
+                  child: HStack([
+                    Image.asset('assets/google.png'),
+                    "Continue With Google".text.semiBold.size(16).white.make().centered()
+                  ],alignment: MainAxisAlignment.spaceAround,),
+                  padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+                ).w(context.screenWidth).h(50),
+              ).centered(),
             ]),
       ),
     );

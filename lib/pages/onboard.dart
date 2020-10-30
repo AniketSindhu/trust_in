@@ -3,6 +3,7 @@ import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flare_flutter/flare.dart';
+import 'package:trust_in/pages/choose.dart';
 class IntroScreen extends StatefulWidget {
   @override
   _IntroScreenState createState() => _IntroScreenState();
@@ -58,7 +59,7 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
   void onDonePress(){
-      //TODO - ADD NAVIGATOR TO CHOOSE ROLE SCREEN
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SelectRole()));
   }
  Widget build(BuildContext context) {
       return Scaffold(
