@@ -12,7 +12,7 @@ class SelectRole extends StatefulWidget {
 
 class _SelectRoleState extends State<SelectRole> {
   final Widget svg = SvgPicture.asset(
-    "images/selectRole.svg",
+    "assets/selectRole.svg",
     height: 350,
     width: 350,
 
@@ -22,23 +22,14 @@ class _SelectRoleState extends State<SelectRole> {
     return Scaffold(
       appBar: GradientAppBar(
         actions: <Widget>[
-          PopupMenuButton(
-            color: Colors.black38,
-            itemBuilder: (BuildContext context){
-              return[
-                PopupMenuItem(
-                  child: FlatButton(
-                    child: "Logout".text.make(),
-                    onPressed: ()async{
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                       prefs.clear();
-                       signOut();
-                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
-                    }
-                  ),
-                ),
-              ];
-            },
+          IconButton(
+            icon:Icon(Icons.logout),
+            onPressed:()async{
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+               prefs.clear();
+               signOut();
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+            } ,
           )
         ],
         centerTitle: true,
@@ -107,7 +98,6 @@ class _SelectRoleState extends State<SelectRole> {
               ),
             ),
           ),
-
         ],
       )
     );

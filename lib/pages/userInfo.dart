@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trust_in/methods/fireBaseAdd.dart';
 import 'package:trust_in/pages/choose.dart';
+import 'package:trust_in/pages/onboard.dart';
 
 class DetailsForm extends StatefulWidget {
   final String name;
@@ -212,7 +213,7 @@ class _DetailsFormState extends State<DetailsForm> {
                       assets = int.parse(Assets);
                       int tempScore = calculateScore();
                       FirebaseAdd().addUser( widget.name, widget.email, widget.phoneNumber, widget.uid, widget.image, tempScore);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return SelectRole();}));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return IntroScreen();}));
                   }
                 },
                 child: Text("Next"),

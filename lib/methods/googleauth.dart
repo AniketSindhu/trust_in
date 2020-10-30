@@ -47,7 +47,7 @@ Future<String> signInWithGoogle(BuildContext context) async {
   phoneNumber=user.phoneNumber;
   imageUrl=user.photoURL;
   /* FirebaseAdd().addUser(name, email, phoneNumber, user.uid, imageUrl); */
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return DetailsForm();}));
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return DetailsForm(name:name,email: email,phoneNumber: phoneNumber,image: imageUrl,uid: user.uid,);}));
   }  
   return 'signInWithGoogle succeeded: $user';
 }

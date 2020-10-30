@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: EdgeInsets.all(30),
                 child: SvgPicture.asset(
-                  'assets/loginred.svg',
+                  'assets/selectRole.svg',
                   height: 350,
                   width: 350,
                 ),
@@ -53,20 +53,15 @@ class _LoginState extends State<Login> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primary,
-                        AppColors.secondary
-                      ],
-                    ),
+                    color: Colors.black
                   ),
                   child: HStack([
                     Image.asset('assets/google.png'),
-                    "Continue With Google".text.semiBold.size(16).white.make().centered()
+                    "Continue With Google".text.bold.size(18).white.make().centered()
                   ],alignment: MainAxisAlignment.spaceAround,),
                   padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                 ).w(context.screenWidth).h(50),
-              ).centered(),
+              ).centered().p32(),
             ]),
       ),
     );
