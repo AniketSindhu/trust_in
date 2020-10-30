@@ -21,7 +21,7 @@ class _IntroScreenState extends State<IntroScreen> {
       new Slide(
           title: "WELCOME",
           description: "A platform to help users to gain opportunities to micro-finance their personal/professional needs securely. ",
-          pathImage:"images/first.png",
+          pathImage:"assets/first.png",
           backgroundColor: Color(0xfff5a623),
           styleDescription:TextStyle(
             fontSize: 20,
@@ -34,7 +34,7 @@ class _IntroScreenState extends State<IntroScreen> {
       new Slide(
           title: "Easy Investment",
           description: "Invest and help others and earn interest on your investment.",
-          pathImage: "images/second.png",
+          pathImage: "assets/second.png",
           backgroundColor: Color(0xff203152),
           styleDescription:TextStyle(
             fontSize: 20,
@@ -47,7 +47,7 @@ class _IntroScreenState extends State<IntroScreen> {
       new Slide(
           title: "Security is Our Priority",
           description: "All transactions are handled securely through ethereum blockchain.",
-          pathImage: "images/third.png",
+          pathImage: "assets/third.png",
           backgroundColor: Color(0XFF006a71),
           styleDescription:TextStyle(
             fontSize: 20,
