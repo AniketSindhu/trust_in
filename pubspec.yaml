@@ -45,6 +45,8 @@ dependencies:
   google_fonts: ^1.1.1
   firebase_auth: ^0.18.2
   google_sign_in: ^4.5.1
+  web3dart: ^1.2.3
+  flutter_spinkit: ^4.1.2+1
 
 dev_dependencies:
   flutter_test:

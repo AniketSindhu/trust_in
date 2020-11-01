@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_in/pages/choose.dart';
+import 'package:trust_in/pages/dashboard.dart';
 import 'package:trust_in/pages/login.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -87,7 +88,7 @@ class MyApp1 extends StatelessWidget {
               primaryColor: Vx.gray800,
               primaryColorBrightness: Brightness.dark
             ),
-            home: SelectRole()
+            home: DashBoardPage()
           );
         }
         // Otherwise, show something whilst waiting for initialization to complete

@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_in/methods/fireBaseAdd.dart';
 import 'package:trust_in/pages/choose.dart';
+import 'package:trust_in/pages/dashboard.dart';
 import 'package:trust_in/pages/onboard.dart';
 import 'package:trust_in/pages/userInfo.dart';
 
@@ -39,7 +40,7 @@ Future<String> signInWithGoogle(BuildContext context) async {
   prefs.setBool('login', true);
   final x= await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
   if(x.exists){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SelectRole()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashBoardPage()));
   }
   else{
   name = user.displayName;

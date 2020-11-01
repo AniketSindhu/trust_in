@@ -4,6 +4,7 @@ import 'package:intro_slider/slide_object.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:trust_in/pages/choose.dart';
+import 'package:trust_in/pages/dashboard.dart';
 class IntroScreen extends StatefulWidget {
   @override
   _IntroScreenState createState() => _IntroScreenState();
@@ -48,7 +49,7 @@ class _IntroScreenState extends State<IntroScreen> {
       new Slide(
           title: "Security is Our Priority",
           description: "All transactions are handled securely through ethereum blockchain.",
-          pathImage: "assets/first.png",
+          pathImage: "assets/first.png",  //TODO: Third asset add
           backgroundColor: Color(0XFF006a71),
           styleDescription:TextStyle(
             fontSize: 20,
@@ -59,7 +60,7 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
   void onDonePress(){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SelectRole()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashBoardPage()));
   }
  Widget build(BuildContext context) {
       return Scaffold(
