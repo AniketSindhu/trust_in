@@ -40,28 +40,13 @@ class _CampaignState extends State<Campaign> {
             child: VxBox(
                 child: VStack(
           [
-            HStack(
-              [
-                "Technology".text.semiBold.size(20).red500.make(),
-                HStack(
-                  [
-                    Icon(Icons.timelapse).iconColor(Colors.grey),
-                    (5).widthBox,
-                    "15 days left".text.normal.gray400.size(18).make()
-                  ],
-                )
-              ],
-              alignment: MainAxisAlignment.spaceBetween,
-              axisSize: MainAxisSize.max,
-            ),
-            (20).heightBox,
             "${widget.campaignModel.campaignName}".text.size(25).extraBold.xl2.make(),
             (10).heightBox,
             Divider(color:Colors.grey[400]),
             (10).heightBox,
             HStack([
-              "\$540".text.size(18).red400.bold.make(),
-              "\$800".text.size(18).black.bold.make(),
+              "${widget.campaignModel.ownedByInvestorTotal*widget.campaignModel.totalAmount/100} GEN".text.size(18).red400.bold.make(),
+              "${widget.campaignModel.totalAmount} GEN".text.size(18).black.bold.make(),
             ]
             ,axisSize: MainAxisSize.max,
             alignment: MainAxisAlignment.spaceBetween,
@@ -75,11 +60,11 @@ class _CampaignState extends State<Campaign> {
                   Color(0xFFFFAA85),
                   Color(0XFFB3315F)
                 ]),
-              value: 0.75,
+              value: widget.campaignModel.ownedByInvestorTotal/100,
             ).h(10),
             (10).heightBox,
             HStack([
-              "75%".text.size(18).normal.color(Colors.grey).make(),
+              "${widget.campaignModel.ownedByInvestorTotal} %".text.size(18).normal.color(Colors.grey).make(),
               "Collected".text.size(18).normal.color(Colors.grey).make(),
             ]
             ,axisSize: MainAxisSize.max,

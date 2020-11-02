@@ -14,7 +14,7 @@ class CampaignList extends StatefulWidget {
 
 class _CampaignListState extends State<CampaignList> {
   Future getCampaigns() async {
-    final x = await FirebaseFirestore.instance.collection('campaigns').get();
+    final x = await FirebaseFirestore.instance.collection('campaigns').where('shownInList',isEqualTo: true).get();
     return x.docs;
   }
 
