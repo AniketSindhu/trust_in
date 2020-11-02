@@ -2,16 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CampaignModel{
   final String campaignName;    //firebase
-  final List<String> images;    //firebase
+  final String image;    //firebase
   final String campaignDescription; //firebase
   final String publisherAddress;
   final int totalAmount;
   final int id;
   final bool finished;
+  final bool showInList;
   final int ownedByInvestorTotal;
   Map <String, Investment>ownership;
 
-  CampaignModel({this.campaignName,this.finished,this.id,this.ownedByInvestorTotal,this.ownership,this.publisherAddress,this.totalAmount,this.campaignDescription,this.images});
+  CampaignModel({this.campaignName,this.finished,this.id,this.ownedByInvestorTotal,this.ownership,this.publisherAddress,this.totalAmount,this.campaignDescription,this.image,this.showInList});
 
   factory CampaignModel.fromDocument(DocumentSnapshot doc)  {
     return CampaignModel(
@@ -23,7 +24,8 @@ class CampaignModel{
         ownedByInvestorTotal: doc['ownedByInvestorTotal'],
         ownership: doc['ownership'],
         campaignDescription: doc['campaignDescription'],
-        images: doc['images']
+        image: doc['image'],
+        showInList: doc['shownInList']
     );
   }
 
@@ -33,11 +35,12 @@ class CampaignModel{
         'publisherAddress': publisherAddress,
         'totalAmount': totalAmount,
         'CampaignId': id,
-        'finished': 'finished',
-        'ownedByInvestorTotal': 'ownedByInvestorTotal',
+        'finished': finished,
+        'ownedByInvestorTotal': ownedByInvestorTotal,
         'ownership': ownership,
-        'images': images,
-        'campaignDescription': campaignDescription
+        'image': image,
+        'campaignDescription': campaignDescription,
+        'shownInList':showInList
     };
   }
 

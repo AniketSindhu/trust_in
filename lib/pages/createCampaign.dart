@@ -1,12 +1,17 @@
 //TODO VALIDATORS DAALDO
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:random_string/random_string.dart';
+import 'package:trust_in/config/config.dart';
+import 'package:trust_in/methods/fireBaseAdd.dart';
+import 'package:trust_in/methods/googleauth.dart';
 import 'package:trust_in/models/campaignModel.dart';
 import 'dart:io';
 import 'package:velocity_x/velocity_x.dart';
@@ -21,8 +26,6 @@ class CreateCampaign extends StatefulWidget {
 final createCampaignForm = GlobalKey<FormState>();
 class _CreateCampaignState extends State<CreateCampaign> {
   PickedFile _image1;
-  PickedFile _image2;
-  PickedFile _image3;
   String projectDesc;
   String projectName;
   String amount;
@@ -34,13 +37,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
     final picker = ImagePicker();
     final image = await picker.getImage(source: ImageSource.gallery);
     setState(() {
-      if (val == 0) {
         _image1 = image;
-      } else if (val == 1) {
-        _image2 = image;
-      } else if (val == 2) {
-        _image3 = image;
-      }
     });
   }
 
@@ -88,7 +85,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
           ),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
+          child: !loading?SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.symmetric(horizontal: 8),
@@ -182,74 +179,25 @@ class _CreateCampaignState extends State<CreateCampaign> {
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          height: 150,
-                          color: Colors.transparent,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            physics: BouncingScrollPhysics(),
-                            children: [
-                              GestureDetector(
-                                onTap: () => pickImage(0),
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: Colors.black12,
-                                  ),
-                                  child: _image1 == null
-                                      ? Center(
-                                          child: Icon(
-                                            Icons.add_a_photo,
-                                            size: 40,
-                                            color: Vx.red700,
-                                          ),
-                                        )
-                                      : Image.file(File(_image1.path)),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => pickImage(1),
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: Colors.black12,
-                                  ),
-                                  child: _image2 == null
-                                      ? Center(
-                                          child: Icon(
-                                            Icons.add_a_photo,
-                                            size: 40,
-                                            color: Vx.red700,
-                                          ),
-                                        )
-                                      : Image.file(File(_image2.path)),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => pickImage(2),
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: Colors.black12,
-                                  ),
-                                  child: _image3 == null
-                                      ? Center(
-                                          child: Icon(
-                                            Icons.add_a_photo,
-                                            size: 40,
-                                            color: Vx.red700,
-                                          ),
-                                        )
-                                      : Image.file(File(_image3.path)),
-                                ),
-                              ),
-                            ],
+                        GestureDetector(
+                          onTap: () => pickImage(0),
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            width: 150,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: Colors.black12,
+                            ),
+                            child: _image1 == null
+                                ? Center(
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      size: 40,
+                                      color: Vx.red700,
+                                    ),
+                                  )
+                                : Image.file(File(_image1.path)),
                           ),
                         ),
                         SizedBox(
@@ -532,12 +480,57 @@ class _CreateCampaignState extends State<CreateCampaign> {
                             if(createCampaignForm.currentState.validate())
                             {
                               Amount = int.parse(amount);
-                              if (int.parse(amount) / widget.user.score < 100) {
+                              if (int.parse(amount) / widget.user.score > 10) {
                                 Fluttertoast.showToast(
                                     msg: 'Score too low for this amount',
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
                                     gravity: ToastGravity.TOP);
+                              }
+                              else if (_image1==null){
+                                Fluttertoast.showToast(
+                                    msg: 'Upload iamge of product',
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    gravity: ToastGravity.TOP);                        
+                              }
+                              else{
+                                setState(() {
+                                  loading =true;
+                                });
+                                FirebaseFirestore.instance.collection('indexVal').doc('value').get().then((value) async{
+                                  int campaignId =value.data()['val'];
+                                  String fileName = "Images/$campaignId";
+                                  StorageReference firebaseStorageRef =
+                                  FirebaseStorage.instance.ref().child(fileName);
+                                  StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(_image1.path));
+                                  StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+                                  await firebaseStorageRef.getDownloadURL().then((fileURL) async {
+                                    await FirebaseAdd().addCampaign(
+                                        widget.user.address,
+                                        CampaignModel(
+                                          campaignName: projectName,
+                                          finished: false,
+                                          id:campaignId,
+                                          ownedByInvestorTotal: 0,
+                                          publisherAddress: widget.user.uid,
+                                          totalAmount: int.parse(amount),
+                                          campaignDescription: projectDesc,
+                                          image:fileURL,
+                                          showInList: true
+                                        )).then((value) async{
+                                          setState((){
+                                            loading=false;
+                                            Fluttertoast.showToast(
+                                                msg: 'Campaign Created',
+                                                backgroundColor: Colors.green,
+                                                textColor: Colors.white,
+                                                gravity: ToastGravity.TOP);   
+                                            Navigator.pop(context);
+                                          });
+                                        });
+                                  });
+                                });
                               }
                             }
                             // TODO phele validation check krna hai fir niche example ki tarah score check krna hai aur else part mai function call jo niche hai 
@@ -548,17 +541,6 @@ class _CreateCampaignState extends State<CreateCampaign> {
                                   textColor: Colors.white,
                                   gravity: ToastGravity.TOP);
                             } */
-                            final campaignId = randomAlpha(8);
-                            setState(() {
-                              loading =true;
-                            });
-/*                             String fileName = "Banners/$campaignId/";
-                            StorageReference firebaseStorageRef =
-                            FirebaseStorage.instance.ref().child(fileName);
-                            StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(_image1.path));
-                            await firebaseStorageRef.getDownloadURL().then((fileURL) async {
-                              _uploadedFileURL = fileURL;
-                            }); */
                           },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0)),
@@ -601,7 +583,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                   ),
                 ],
               ),
-            ),
+            )
+            ):Center(
+              child:SpinKitWave(color: AppColors.primary,size:55),
           ),
         ));
   }
