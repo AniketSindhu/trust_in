@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trust_in/config/config.dart';
 import 'package:trust_in/methods/getUser.dart';
 import 'package:trust_in/models/UserModel.dart';
+import 'package:trust_in/pages/createCampaign.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -109,19 +110,15 @@ class _DashBoardPageState extends State<DashBoardPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${user.balance}',
+                                  '${user.balance} GEN',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.redAccent,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 30),
                                 ),
-                                Text(
-                                  'Available Genuine Coins',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:Colors.white, fontSize: 16),
-                                ),
+                                (5).heightBox,
+                                "1 GEN Coin = 50 INR".text.size(14).white.makeCentered()
                               ],
                             ),
                           ),
@@ -140,21 +137,45 @@ class _DashBoardPageState extends State<DashBoardPage> {
                           children: [
                             TableRow(children: [
                               _actionList(
-                                  Icons.call_made_outlined, 'Send Money'),
+                                  Icons.call_made_outlined,
+                                  'Send Money',
+                                  (){
+                                        //TODO Show dialog mai address fir blockchain mai tranferFrom
+                                  }),
                               _actionList(
-                                  Icons.call_received_outlined, 'Request'),
+                                  Icons.call_received_outlined, 
+                                  'Request',
+                                  (){
+                                    //TODO Show dialog with qr code of eth address of user
+                                  }),
                             ]),
                             TableRow(children: [
-                              _actionList(Icons.attach_money_outlined,
-                                  'Create Campaign'),
-                              _actionList(Icons.assignment_returned_outlined,
-                                  'Invest in Campaigns'),
+                              _actionList(
+                                Icons.attach_money_outlined,
+                                  'Create Campaign',
+                                  (){
+                                    Navigator.push(context, MaterialPageRoute(builder:(context){return CreateCampaign(user:user);}));
+                                  }),
+                              _actionList(
+                                Icons.assignment_returned_outlined,
+                                  'Invest in Campaigns',
+                                  (){
+                                    //TODO navigate to list of campigns.
+                                  }),
                             ]),
                             TableRow(children: [
-                              _actionList(Icons.my_library_books_outlined,
-                                  'My Campigns'),
-                              _actionList(Icons.monetization_on_outlined,
-                                  'My Investments'),
+                              _actionList(
+                                Icons.my_library_books_outlined,
+                                'My Campigns',
+                                (){
+                                  //TODO  navigate to my campigns
+                                }),
+                              _actionList(
+                                Icons.monetization_on_outlined,
+                                  'My Investments',
+                                  (){
+                                    //TODO Navigate to my investment
+                                  }),
                             ])
                           ],
                         ),
@@ -171,22 +192,25 @@ class _DashBoardPageState extends State<DashBoardPage> {
   }
 
 // custom action widget
-  Widget _actionList(IconData icon, String desc) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(icon,color: Colors.white,size:40),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            desc,
-            style: TextStyle(color: Colors.white),
-          )
-        ],
+  Widget _actionList(IconData icon, String desc, Function tapFunction) {
+    return GestureDetector(
+      onTap: tapFunction,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(icon,color: Colors.white,size:40),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              desc,
+              style: TextStyle(color: Colors.white),
+            )
+          ],
+        ),
       ),
     );
   }

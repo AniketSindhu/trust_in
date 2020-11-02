@@ -9,8 +9,9 @@ class UserModel{
   final int balance;
   final String address;
   final String uid;
+  final int score;
 
-  UserModel({this.email,this.name,this.address,this.balance,this.phone,this.uid});
+  UserModel({this.email,this.name,this.address,this.balance,this.phone,this.uid,this.score});
 
   factory UserModel.fromDocument(DocumentSnapshot doc)  {
     return UserModel(
@@ -19,12 +20,13 @@ class UserModel{
         phone: doc['phoneNumber'],
         address: doc['ethAddress'],
         balance: doc['balance'],
-        uid: doc['uid']
+        uid: doc['uid'],
+        score: doc['score']
     );
   }
 
   EthereumAddress getEthaddress(address){
     return EthereumAddress.fromHex(address);
   }
-  
+
 }
