@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trust_in/config/config.dart';
+import 'package:trust_in/methods/blockchain.dart';
 import 'package:trust_in/methods/getUser.dart';
 import 'package:trust_in/models/UserModel.dart';
 import 'package:trust_in/pages/campignslist.dart';
 import 'package:trust_in/pages/createCampaign.dart';
+import 'package:trust_in/pages/myCampaign.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:web3dart/credentials.dart';
 
 class DashBoardPage extends StatefulWidget {
   @override
@@ -110,13 +113,23 @@ class _DashBoardPageState extends State<DashBoardPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  '${user.balance} GEN',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.redAccent,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30),
+                                FutureBuilder(
+                                  future: query("balanceOf",[EthereumAddress.fromHex(user.address)]),
+                                  builder: (context, snapshot) {
+                                    if(snapshot.connectionState==ConnectionState.waiting)
+                                      {
+                                        return "Loading balance".text.size(30).make().shimmer();
+                                      }
+                                    else
+                                    return Text(
+                                      '${snapshot.data[0]} GEN',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    );
+                                  }
                                 ),
                                 (5).heightBox,
                                 "1 GEN Coin = 50 INR".text.size(14).white.makeCentered()
@@ -140,13 +153,17 @@ class _DashBoardPageState extends State<DashBoardPage> {
                               _actionList(
                                   Icons.call_made_outlined,
                                   'Send Money',
-                                  (){
+                                  ()async{ 
+/*                                       var result = await query("balanceOf",[EthereumAddress.fromHex(user.address)]);
+                                      print(result[0]); */
                                         //TODO Show dialog mai address fir blockchain mai tranferFrom
                                   }),
                               _actionList(
                                   Icons.call_received_outlined, 
                                   'Request',
-                                  (){
+                                  ()async{
+/*                                  var response = await submit("_mint",[EthereumAddress.fromHex(user.address), BigInt.from(1000)]);
+                                    print(response); */
                                     //TODO Show dialog with qr code of eth address of user
                                   }),
                             ]),
@@ -169,7 +186,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                 Icons.my_library_books_outlined,
                                 'My Campigns',
                                 (){
-                                  //TODO  navigate to my campigns
+                                  Navigator.push(context, MaterialPageRoute(builder:(context){return MyCampaigns(address: user.address,);}));
                                 }),
                               _actionList(
                                 Icons.monetization_on_outlined,

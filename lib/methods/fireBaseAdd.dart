@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:trust_in/methods/blockchain.dart';
 import 'package:trust_in/models/campaignModel.dart';
 import 'package:trust_in/pages/campaign.dart';
 import 'package:web3dart/web3dart.dart';
 
 class FirebaseAdd{
   
-  addUser(String name,String email, String phoneNumber,String uid,String image,int score) async{
+  Future<String>addUser(String name,String email, String phoneNumber,String uid,String image,int score) async{
     var rng = new Random.secure();
     Credentials random = EthPrivateKey.createRandom(rng);
     var address = await random.extractAddress();
-    FirebaseFirestore.instance.collection('users').doc(address.hex)
+    await FirebaseFirestore.instance.collection('users').doc(address.hex)
     .set({ 
       'name': name, 
       'email': email,
@@ -23,8 +24,9 @@ class FirebaseAdd{
       'balance':1000
     },SetOptions(merge:true));
 
-    //TODO: etherum mint 1000 coins in the wallet
-
+    var response = await submit("_mint",[address, BigInt.from(1000)]);
+    // https://rinkeby.etherscan.io/tx/$response   for transaction info
+    print(response);
   }
 
   Future<bool>addCampaign(String address, CampaignModel campaignModel) async{
