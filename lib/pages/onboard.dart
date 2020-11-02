@@ -49,7 +49,7 @@ class _IntroScreenState extends State<IntroScreen> {
       new Slide(
           title: "Security is Our Priority",
           description: "All transactions are handled securely through ethereum blockchain.",
-          pathImage: "assets/first.png",  //TODO: Third asset add
+          pathImage: "assets/third.png",  //TODO: Third asset add
           backgroundColor: Color(0XFF006a71),
           styleDescription:TextStyle(
             fontSize: 20,

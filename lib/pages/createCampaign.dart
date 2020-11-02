@@ -18,13 +18,15 @@ class CreateCampaign extends StatefulWidget {
   @override
   _CreateCampaignState createState() => _CreateCampaignState();
 }
-
+final createCampaignForm = GlobalKey<FormState>();
 class _CreateCampaignState extends State<CreateCampaign> {
   PickedFile _image1;
   PickedFile _image2;
   PickedFile _image3;
+  String projectDesc;
   String projectName;
   String amount;
+  int Amount;
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   bool loading=false;
@@ -81,7 +83,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
             begin: Alignment.topCenter,
             colors: [
               const Color(0xFFFFAA85),
-              const Color(0XFFB3315F),
+              const Color(0xFFB3315F),
             ],
           ),
         ),
@@ -95,6 +97,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Form(
+                    key: createCampaignForm,
                     child: Column(
                       children: [
                         (10).heightBox,
@@ -123,12 +126,18 @@ class _CreateCampaignState extends State<CreateCampaign> {
 //                                          const Color(0XFFB3315F),
 //                                        ],
 //                                    ),
-                            color: Color(0XFFfcdada),
+                            color: Color(0xFFfcdada),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextFormField(
                             onChanged: (value) {
                               projectName = value;
+                            },
+                            validator: (value) {
+                              if (value.trim().length==0) {
+                                return "Cannot be Empty";
+                              }
+                              return null;
                             },
                             style: TextStyle(
                               color: Colors.black,
@@ -272,6 +281,18 @@ class _CreateCampaignState extends State<CreateCampaign> {
                             onChanged: (value) {
                               amount = value;
                             },
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              Pattern pattern = r'^[1-9]\d*$';
+                              RegExp regex = new RegExp(pattern);
+                              if (value.trim().length==0) {
+                                return "Cannot be Empty";
+                              }
+                              else if(!regex.hasMatch(value)){
+                                return "Enter A Valid Value (Integer)";
+                              }
+                              return null;
+                            },
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -293,6 +314,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                                 color: Colors.white,
                               ),
                             ),
+
                           ),
                         ),
                         SizedBox(
@@ -469,7 +491,13 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           ),
                           child: TextFormField(
                             onChanged: (value) {
-                              projectName = value;
+                              projectDesc = value;
+                            },
+                            validator: (value) {
+                              if (value.trim().length==0) {
+                                return "Cannot be Empty";
+                              }
+                              return null;
                             },
                             maxLines: 4,
                             style: TextStyle(
@@ -501,6 +529,17 @@ class _CreateCampaignState extends State<CreateCampaign> {
                         ),
                         RaisedButton(
                           onPressed: () async {
+                            if(createCampaignForm.currentState.validate())
+                            {
+                              Amount = int.parse(amount);
+                              if (int.parse(amount) / widget.user.score < 100) {
+                                Fluttertoast.showToast(
+                                    msg: 'Score too low for this amount',
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    gravity: ToastGravity.TOP);
+                              }
+                            }
                             // TODO phele validation check krna hai fir niche example ki tarah score check krna hai aur else part mai function call jo niche hai 
 /*                          if (int.parse(amount) / widget.user.score < 100) {
                               Fluttertoast.showToast(
