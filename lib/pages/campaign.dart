@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:milestone_progress/milestone_progress.dart';
+import 'package:trust_in/models/campaignModel.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class Campaign extends StatefulWidget {
-  Campaign({Key key}) : super(key: key);
-
+  final CampaignModel campaignModel;
+  Campaign({Key key,this.campaignModel}) : super(key: key);
   @override
   _CampaignState createState() => _CampaignState();
 }
@@ -14,12 +17,23 @@ class _CampaignState extends State<Campaign> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        
         body: ZStack([
-      Image.asset(
-        "assets/drone.jpg",
-        fit: BoxFit.fill,
-      ).h(context.percentHeight * 45).w(context.screenWidth),
+          CachedNetworkImage(
+            fadeInDuration: Duration(seconds: 1),
+            fit: BoxFit.fitWidth,
+            imageUrl: widget.campaignModel.image,
+            imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            )),
+            placeholder: (context, url) =>
+                SpinKitWave(color: Colors.red, size: 25).shimmer(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ).h(context.percentHeight * 45).w(context.screenWidth),
       VStack([
         (context.percentHeight * 33).heightBox,
         Expanded(
@@ -41,7 +55,7 @@ class _CampaignState extends State<Campaign> {
               axisSize: MainAxisSize.max,
             ),
             (20).heightBox,
-            "Delivery Drone".text.size(25).extraBold.xl2.make(),
+            "${widget.campaignModel.campaignName}".text.size(25).extraBold.xl2.make(),
             (10).heightBox,
             Divider(color:Colors.grey[400]),
             (10).heightBox,
@@ -92,7 +106,7 @@ class _CampaignState extends State<Campaign> {
               length: 2,
               child: TabBarView(
                 children:[
-                  "A paragraph is a series of related sentences developing a central idea, called the topic. Try to think about paragraphs in terms of thematic unity: a paragraph is a sentence or a group of sentences that supports one central, unified idea. Paragraphs add one idea at a time to your broader argument.".text.overflow(TextOverflow.fade).xl.gray700.semiBold.make(),
+                  "${widget.campaignModel.campaignDescription}".text.overflow(TextOverflow.fade).xl.gray700.semiBold.make(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

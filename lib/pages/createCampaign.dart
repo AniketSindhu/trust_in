@@ -479,15 +479,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           onPressed: () async {
                             if(createCampaignForm.currentState.validate())
                             {
-                              Amount = int.parse(amount);
-                              if (int.parse(amount) / widget.user.score > 10) {
-                                Fluttertoast.showToast(
-                                    msg: 'Score too low for this amount',
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    gravity: ToastGravity.TOP);
-                              }
-                              else if (_image1==null){
+                             if (_image1==null){
                                 Fluttertoast.showToast(
                                     msg: 'Upload iamge of product',
                                     backgroundColor: Colors.red,
@@ -513,7 +505,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                                           finished: false,
                                           id:campaignId,
                                           ownedByInvestorTotal: 0,
-                                          publisherAddress: widget.user.uid,
+                                          publisherAddress: widget.user.address,
                                           totalAmount: int.parse(amount),
                                           campaignDescription: projectDesc,
                                           image:fileURL,

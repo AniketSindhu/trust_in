@@ -29,7 +29,7 @@ class FirebaseAdd{
 
   Future<bool>addCampaign(String address, CampaignModel campaignModel) async{
   await FirebaseFirestore.instance.collection('users').doc(address).update({'campaigns': FieldValue.arrayUnion([campaignModel.id])});
-  await FirebaseFirestore.instance.collection('campaigns').add(campaignModel.toMap());
+  await FirebaseFirestore.instance.collection('campaigns').doc(campaignModel.id.toString()).set(campaignModel.toMap());
   await FirebaseFirestore.instance.collection('indexVal').doc('value').update({'val':FieldValue.increment(1)});
     if(campaignModel.totalAmount>=2000&&campaignModel.totalAmount<=4000){
       await FirebaseFirestore.instance.collection('users').doc(address).update({'score': FieldValue.increment(-50)});

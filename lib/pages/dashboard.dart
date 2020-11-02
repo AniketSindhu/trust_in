@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trust_in/config/config.dart';
 import 'package:trust_in/methods/getUser.dart';
 import 'package:trust_in/models/UserModel.dart';
+import 'package:trust_in/pages/campignslist.dart';
 import 'package:trust_in/pages/createCampaign.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -160,7 +161,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                 Icons.assignment_returned_outlined,
                                   'Invest in Campaigns',
                                   (){
-                                    //TODO navigate to list of campigns.
+                                    Navigator.push(context, MaterialPageRoute(builder:(context)=>CampaignList()));
                                   }),
                             ]),
                             TableRow(children: [
