@@ -212,7 +212,7 @@ class _DetailsFormState extends State<DetailsForm> {
                       loanAmount = int.parse(LoanAmount);
                       assets = int.parse(Assets);
                       int tempScore = calculateScore();
-                      FirebaseAdd().addUser( widget.name, widget.email, widget.phoneNumber, widget.uid, widget.image, tempScore);
+                      FirebaseAdd().addUser( widget.name, widget.email, widget.phoneNumber, widget.uid, widget.image, tempScore, context);
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return IntroScreen();}));
                   }
                 },

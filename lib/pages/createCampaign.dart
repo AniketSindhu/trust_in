@@ -510,7 +510,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                                           campaignDescription: projectDesc,
                                           image:fileURL,
                                           showInList: true
-                                        )).then((value) async{
+                                        ),context).then((value) async{
                                           setState((){
                                             loading=false;
                                             Fluttertoast.showToast(

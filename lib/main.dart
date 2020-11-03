@@ -1,3 +1,4 @@
+import 'package:dialog_context/dialog_context.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
+            builder: DialogContext().builder,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Vx.gray800,
@@ -83,6 +85,7 @@ class MyApp1 extends StatelessWidget {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
+            builder: DialogContext().builder,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Vx.gray800,

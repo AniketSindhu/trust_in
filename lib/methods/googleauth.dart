@@ -38,8 +38,8 @@ Future<String> signInWithGoogle(BuildContext context) async {
   assert(user.displayName != null);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('login', true);
-  final x= await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-  if(x.exists){
+  final x= await FirebaseFirestore.instance.collection('users').where('uid',isEqualTo:user.uid).get();
+  if(x.docs.isNotEmpty){
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashBoardPage()));
   }
   else{

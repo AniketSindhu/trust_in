@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:trust_in/methods/blockchain.dart';
 import 'package:trust_in/models/campaignModel.dart';
 import 'package:trust_in/pages/campaign.dart';
@@ -8,7 +11,7 @@ import 'package:web3dart/web3dart.dart';
 
 class FirebaseAdd{
   
-  Future<String>addUser(String name,String email, String phoneNumber,String uid,String image,int score) async{
+  Future<String>addUser(String name,String email, String phoneNumber,String uid,String image,int score,BuildContext context) async{
     var rng = new Random.secure();
     Credentials random = EthPrivateKey.createRandom(rng);
     var address = await random.extractAddress();
@@ -24,12 +27,12 @@ class FirebaseAdd{
       'balance':1000
     },SetOptions(merge:true));
 
-    var response = await submit("_mint",[address, BigInt.from(1000)]);
+    var response = await submit("_mint",[address, BigInt.from(1000)],context);
     // https://rinkeby.etherscan.io/tx/$response   for transaction info
     print(response);
   }
 
-  Future<bool>addCampaign(String address, CampaignModel campaignModel) async{
+  Future<bool>addCampaign(String address, CampaignModel campaignModel,BuildContext context) async{
   await FirebaseFirestore.instance.collection('users').doc(address).update({'campaigns': FieldValue.arrayUnion([campaignModel.id])});
   await FirebaseFirestore.instance.collection('campaigns').doc(campaignModel.id.toString()).set(campaignModel.toMap());
   await FirebaseFirestore.instance.collection('indexVal').doc('value').update({'val':FieldValue.increment(1)});
@@ -42,7 +45,7 @@ class FirebaseAdd{
     else if(campaignModel.totalAmount>6000){
       await FirebaseFirestore.instance.collection('users').doc(address).update({'score': FieldValue.increment(-150)});
     }
-    // TODO invoke createcampign on blockchain also
+    var response = await submit("createCampaign",[BigInt.from(campaignModel.totalAmount),EthereumAddress.fromHex(address), BigInt.from(campaignModel.id)],context);
     return true;
   }
 

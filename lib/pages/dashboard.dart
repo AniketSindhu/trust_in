@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_in/config/config.dart';
 import 'package:trust_in/methods/blockchain.dart';
 import 'package:trust_in/methods/getUser.dart';
+import 'package:trust_in/methods/googleauth.dart';
 import 'package:trust_in/models/UserModel.dart';
 import 'package:trust_in/pages/campignslist.dart';
 import 'package:trust_in/pages/createCampaign.dart';
+import 'package:trust_in/pages/login.dart';
 import 'package:trust_in/pages/myCampaign.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:web3dart/credentials.dart';
@@ -85,7 +88,19 @@ class _DashBoardPageState extends State<DashBoardPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   '${user.getEthaddress(user.address)}'.text.normal.size(14).gray800.maxLines(1).make().px32().py8(),
-                  IconButton(icon:Icon(Icons.copy,color: Colors.white,size: 25,),splashColor: Colors.green,iconSize: 25,onPressed: (){},)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(icon:Icon(Icons.copy,color: Colors.white,size: 25,),splashColor: Colors.green,iconSize: 25,onPressed: (){},),
+                      (20).widthBox,
+                      IconButton(icon:Icon(Icons.logout,color: Colors.white,size: 25,),splashColor: Colors.green,iconSize: 25,onPressed: ()async{
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                         prefs.clear();
+                         signOut();
+                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+                      },),
+                    ],
+                  )
                 ],
               ),
               Container(
@@ -132,7 +147,14 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                   }
                                 ),
                                 (5).heightBox,
-                                "1 GEN Coin = 50 INR".text.size(14).white.makeCentered()
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    "1 GEN Coin = 50 INR".text.size(14).white.makeCentered(),
+                                    (5).widthBox,
+                                    IconButton(icon:Icon(Icons.refresh,color:Colors.white),onPressed: ()=>setState((){}),)
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -154,8 +176,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                   Icons.call_made_outlined,
                                   'Send Money',
                                   ()async{ 
-/*                                       var result = await query("balanceOf",[EthereumAddress.fromHex(user.address)]);
-                                      print(result[0]); */
+                                   var result = await query("campaigns",[/* EthereumAddress.fromHex(user.address) */BigInt.from(0)]);
+                                      print(result);
                                         //TODO Show dialog mai address fir blockchain mai tranferFrom
                                   }),
                               _actionList(

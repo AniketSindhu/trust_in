@@ -50,7 +50,9 @@ dependencies:
   random_string: ^2.1.0
   cached_network_image: ^2.3.3
   http: ^0.12.2
-
+  flushbar: ^1.10.4
+  url_launcher: ^5.7.8
+  dialog_context: ^0.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
