@@ -95,6 +95,7 @@ class FirebaseAdd {
           "campaignId":campaign.id,
           "isPaid": false,
           "isApproved":false,
+          "repaid":0,
           "ownershipPercent": (investAmount/campaign.totalAmount)*100,
         });
 
@@ -111,6 +112,7 @@ class FirebaseAdd {
           "campaignId":campaign.id,
           "isApproved":false,
           "isPaid": false,
+          "repaid":0,
           "ownershipPercent": (investAmount/campaign.totalAmount)*100,
         });
 

@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:trust_in/methods/blockchain.dart';
+import 'package:trust_in/methods/getUser.dart';
+import 'package:trust_in/models/UserModel.dart';
 import 'package:trust_in/models/campaignModel.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:web3dart/credentials.dart';
 
 class ApprovalPage extends StatefulWidget {
   final CampaignModel campaign;
@@ -14,7 +19,7 @@ class ApprovalPage extends StatefulWidget {
 
 class _ApprovalPageState extends State<ApprovalPage> {
   Stream getApprovals() {
-    final x =  FirebaseFirestore.instance
+    final x = FirebaseFirestore.instance
         .collection("campaigns")
         .doc(widget.campaign.id.toString())
         .collection("notApproved")
@@ -23,7 +28,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
     return x;
   }
 
-  Future<void> _showAcceptDialog() async {
+  Future<void> _showAcceptDialog(QueryDocumentSnapshot snap) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -40,8 +45,83 @@ class _ApprovalPageState extends State<ApprovalPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Yes'),
-              onPressed: () {
-                //TODO- HERE UPDATE THE TRANSACTION FOR THIS USER TO ACCEPT THIS PROPOSAL IN BLOCKCHAIN
+              onPressed: () async {
+                if (snap.data()['ownershipPercent'] +
+                        widget.campaign.ownedByInvestorTotal >
+                    100) {
+                  Fluttertoast.showToast(
+                      msg: "Ownership of investors exceeds 100%",
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      gravity: ToastGravity.TOP);
+                  Navigator.of(context).pop();
+                } else {
+                  var response = await submit(
+                      "investToCampaign",
+                      [
+                        BigInt.from(widget.campaign.id),
+                        BigInt.from(snap.data()['ownershipPercent']),
+                        EthereumAddress.fromHex(snap.data()['investorAddress']),
+                        BigInt.from(snap.data()['investAmount']),
+                        BigInt.from(snap.data()['interest'])
+                      ],
+                      context);
+                  print(response);
+                  UserModel currentUser = await getCurrentUser();
+
+                  await FirebaseFirestore.instance
+                      .collection("campaigns")
+                      .doc(widget.campaign.id.toString())
+                      .collection("notApproved")
+                      .doc(snap.data()['investorAddress'])
+                      .update({'isApproved': true});
+
+                  await FirebaseFirestore.instance
+                      .collection("campaigns")
+                      .doc(widget.campaign.id.toString())
+                      .collection("investments")
+                      .doc(snap.data()['investorAddress'])
+                      .set(snap.data());
+
+                  await FirebaseFirestore.instance
+                      .collection("campaigns")
+                      .doc(widget.campaign.id.toString())
+                      .collection("investments")
+                      .doc(snap.data()['investorAddress'])
+                      .update({'lastDate': DateTime.now(), 'isApproved': true});
+
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(currentUser.address)
+                      .update({
+                    'balance':
+                        FieldValue.increment(snap.data()['investAmount']),
+                  });
+
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(snap.data()['investorAddress'])
+                      .update({
+                    'balance':
+                        FieldValue.increment(-snap.data()['investAmount']),
+                  });
+
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(snap.data()['investorAddress'])
+                      .collection('investments')
+                      .doc(widget.campaign.id.toString())
+                      .update({'lastDate': DateTime.now(), 'isApproved': true});
+
+                  Fluttertoast.showToast(
+                      msg:
+                          "Approval accepted, the investment amount will reflect in your wallet in few moments",
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      gravity: ToastGravity.TOP);
+
+                  Navigator.of(context).pop();
+                }
               },
             ),
             FlatButton(
@@ -56,7 +136,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
     );
   }
 
-  Future<void> _showRejectDialog() async {
+  Future<void> _showRejectDialog(QueryDocumentSnapshot snap) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -73,8 +153,28 @@ class _ApprovalPageState extends State<ApprovalPage> {
           actions: <Widget>[
             FlatButton(
               child: Text('Yes'),
-              onPressed: () {
-                //TODO- HERE REJECT THIS PROPOSAL AND REMOVE IT FROM THE LIST OF PROPOSALS
+              onPressed: () async {
+                await FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(snap.data()['investorAddress'])
+                    .collection('investments')
+                    .doc(widget.campaign.id.toString())
+                    .delete();
+
+                await FirebaseFirestore.instance
+                    .collection("campaigns")
+                    .doc(widget.campaign.id.toString())
+                    .collection("notApproved")
+                    .doc(snap.data()['investorAddress'])
+                    .delete();
+
+                Fluttertoast.showToast(
+                    msg: "Approval rejected",
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    gravity: ToastGravity.TOP);
+
+                Navigator.of(context).pop();
               },
             ),
             FlatButton(
@@ -105,70 +205,84 @@ class _ApprovalPageState extends State<ApprovalPage> {
         ),
       ),
       body: StreamBuilder(
-        stream: getApprovals(),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState==ConnectionState.waiting){
-            return Center(child: SpinKitWave(color:Colors.red,size:50),);
-          }
-          if(snapshot.hasData){
-            if(snapshot.data.documents.length==0){
-              return Center(child:"Nothing to Approve".text.size(22).semiBold.red600.make());
+          stream: getApprovals(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: SpinKitWave(color: Colors.red, size: 50),
+              );
             }
-            else{
-              return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    bool pressedCheck = false;
-                    bool pressedBlock = false;
-                    return Card(
-                      child: ListTile(
-                          title: Text("${snapshot.data.documents[index].data()['investorName']} offers ${snapshot.data.documents[index].data()['investAmount']} GEN"),
-                          subtitle: Text(
-                            "at ${snapshot.data.documents[index].data()['interest']}% per month for ${snapshot.data.documents[index].data()['ownershipPercent']}% ownership",
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              RaisedButton(
-                                color: Colors.green,
-                                onPressed: () {
-                                  //TODO - alert dialog box
-                                  _showAcceptDialog();
-                                  //TODO - update the transaction
-                                },
-                                shape: CircleBorder(),
-                                child: Icon(
-                                  Icons.check,
-                                  size: 50,
-                                  color: Colors.white,
+            if (snapshot.hasData) {
+              if (snapshot.data.documents.length == 0) {
+                return Center(
+                    child: "Nothing to Approve"
+                        .text
+                        .size(22)
+                        .semiBold
+                        .red600
+                        .make());
+              } else {
+                return ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      bool pressedCheck = false;
+                      bool pressedBlock = false;
+                      return Card(
+                        child: ListTile(
+                            title: Text(
+                                "${snapshot.data.documents[index].data()['investorName']} offers ${snapshot.data.documents[index].data()['investAmount']} GEN"),
+                            subtitle: Text(
+                              "at ${snapshot.data.documents[index].data()['interest']}% per month for ${snapshot.data.documents[index].data()['ownershipPercent']}% ownership",
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                RaisedButton(
+                                  color: Colors.green,
+                                  onPressed: () {
+                                    //TODO - alert dialog box
+                                    _showAcceptDialog(
+                                        snapshot.data.documents[index]);
+                                    //TODO - update the transaction
+                                  },
+                                  shape: CircleBorder(),
+                                  child: Icon(
+                                    Icons.check,
+                                    size: 50,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              RaisedButton(
-                                color: Colors.red,
-                                onPressed: () {
-                                  //TODO - alert dialog box
-                                  _showRejectDialog();
-                                  //TODO - update the transaction
-                                },
-                                shape: CircleBorder(),
-                                child: Icon(
-                                  Icons.block,
-                                  size: 50,
-                                  color: Colors.white,
+                                RaisedButton(
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    //TODO - alert dialog box
+                                    _showRejectDialog(
+                                        snapshot.data.documents[index]);
+                                    //TODO - update the transaction
+                                  },
+                                  shape: CircleBorder(),
+                                  child: Icon(
+                                    Icons.block,
+                                    size: 50,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )),
-                    );
-                  });
-                }
+                              ],
+                            )),
+                      );
+                    });
               }
-              else{
-                return Center(child:"Nothing to Approve".text.size(22).semiBold.red600.make());
-              }
-        }
-      ),
+            } else {
+              return Center(
+                  child: "Nothing to Approve"
+                      .text
+                      .size(22)
+                      .semiBold
+                      .red600
+                      .make());
+            }
+          }),
     );
   }
 }

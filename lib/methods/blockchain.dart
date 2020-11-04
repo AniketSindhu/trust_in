@@ -11,7 +11,7 @@ import 'package:web3dart/web3dart.dart';
 
   Future<DeployedContract> loadContract() async {
     String abi = await rootBundle.loadString("assets/abi.json");
-    String contractAddress =  "0xFd9327c283659e7A95E3A954cF89ac40c19E635C";
+    String contractAddress =  "0xe50A416700C1A4b72c3462cBd071ba9c533b653b";
     final contract = DeployedContract(ContractAbi.fromJson(abi, "SharedOwenrship"),
         EthereumAddress.fromHex(contractAddress));
     return contract;
