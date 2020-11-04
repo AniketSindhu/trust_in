@@ -106,7 +106,7 @@ class _AllLedgersState extends State<AllLedgers> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               margin: EdgeInsets.all(15),
                 child:Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Color(0xFFd9ecf2)
@@ -142,7 +142,7 @@ class _AllLedgersState extends State<AllLedgers> {
                           ),
                         ),
                         SizedBox(
-                          height: 4,
+                          height: 16,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -151,14 +151,14 @@ class _AllLedgersState extends State<AllLedgers> {
                             Text(
                               "20000",
                               style: TextStyle(
-                                fontSize: 50,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              "GEN remaining",
+                              " GEN remaining",
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 25,
                               ),
                             ),
                           ],
@@ -178,15 +178,8 @@ class _AllLedgersState extends State<AllLedgers> {
                               padding: const EdgeInsets.all(0.0),
                               child: Ink(
                                 decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      const Color(0XFFFCCF31),
-                                      const Color(0XFFF55555),
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                                  color: Color(0xFF352740),
+                                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
                                 ),
                                 child: Container(
                                   padding: EdgeInsets.all(10),
@@ -194,7 +187,7 @@ class _AllLedgersState extends State<AllLedgers> {
                                   constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
                                   alignment: Alignment.center,
                                   child: const Text(
-                                    'REPAY',
+                                    'Repay',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 25,

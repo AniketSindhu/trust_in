@@ -46,7 +46,10 @@ class MyApp extends StatelessWidget {
               primaryColor: Vx.gray800,
               primaryColorBrightness: Brightness.dark
             ),
-            home:Login()
+            home:Login(),
+            routes: {
+              'dashboard':(context)=>DashBoardPage()
+            },
           );
         }
 
@@ -91,7 +94,10 @@ class MyApp1 extends StatelessWidget {
               primaryColor: Vx.gray800,
               primaryColorBrightness: Brightness.dark
             ),
-            home: DashBoardPage()
+            home: DashBoardPage(),
+            routes: {
+              'dashboard':(context)=>DashBoardPage()
+            },
           );
         }
         // Otherwise, show something whilst waiting for initialization to complete

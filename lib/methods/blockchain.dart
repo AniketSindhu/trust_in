@@ -41,7 +41,7 @@ import 'package:web3dart/web3dart.dart';
     EthPrivateKey credential =EthPrivateKey.fromHex("2d0b3dd23b10339a1791f4cdc82602029db757c031191bef9b0652474892a2b7");
     DeployedContract contract = await loadContract();
     final ethFunction = contract.function(functionName);
-    final result = await ethClient.sendTransaction(credential, Transaction.callContract(contract: contract, function: ethFunction, parameters: args,maxGas: 10000000,gasPrice: EtherAmount.inWei(BigInt.from(5000000000000))),fetchChainIdFromNetworkId: true,);
+    final result = await ethClient.sendTransaction(credential, Transaction.callContract(contract: contract, function: ethFunction, parameters: args,maxGas: 1000000,gasPrice: EtherAmount.inWei(BigInt.from(10000000000))),fetchChainIdFromNetworkId: true,);
 /*     Flushbar flush;
     Flushbar<bool>(
       title: "Hey Ninja",

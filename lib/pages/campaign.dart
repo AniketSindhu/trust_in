@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:milestone_progress/milestone_progress.dart';
 import 'package:trust_in/models/campaignModel.dart';
+import 'package:trust_in/pages/supportProject.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class Campaign extends StatefulWidget {
@@ -114,7 +115,9 @@ class _CampaignState extends State<Campaign> {
             ).h(90),
             (20).heightBox,
             RaisedButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder:(context)=>SupportProject(campaignModel:widget.campaignModel)));
+              },
               padding: EdgeInsets.all(0.0),
               shape:  StadiumBorder(),
               child: Container(

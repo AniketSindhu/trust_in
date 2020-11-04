@@ -176,7 +176,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                   Icons.call_made_outlined,
                                   'Send Money',
                                   ()async{ 
-                                   var result = await query("campaigns",[/* EthereumAddress.fromHex(user.address) */BigInt.from(0)]);
+                                   var result = await query("campaignCount",[/* EthereumAddress.fromHex(user.address) /* */BigInt.from(0) */]);
                                       print(result);
                                         //TODO Show dialog mai address fir blockchain mai tranferFrom
                                   }),

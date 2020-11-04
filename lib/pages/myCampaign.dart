@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:trust_in/models/campaignModel.dart';
 import 'package:trust_in/pages/campaign.dart';
+import 'package:trust_in/pages/myCampaignSingle.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MyCampaigns extends StatefulWidget {
@@ -53,7 +54,7 @@ class _MyCampaignsState extends State<MyCampaigns> {
                 return GestureDetector(
                   onTap: (){
                     /* Navigator.push(context, MaterialPageRoute(builder:(context)=>Campaign(campaignModel: campaign,))); */
-                    //TODO attach page to pay interest
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCampaignSingle(campaign:campaign,)));
                   },
                   child: VxBox(
                       child: VStack([
