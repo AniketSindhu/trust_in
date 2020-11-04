@@ -3,10 +3,10 @@ A Blockchain Based Crowd Funding Platform
 Made with flutter and smart Contracts.
 
 ## Idea
-We want to make a decentralized system where no authority is involved using Blockchain technology.
+* We want to make a decentralized system where no authority is involved using Blockchain technology.
 So we came up with TrustIn, a platform which allows users to raise funds for purchasing products for their personal and professional needs.
 
-Our app benefits both the investor as well as the fund raiser.
+* Our app benefits both the investor as well as the fund raiser.
 The fund raiser is able to buy the product now and pay the investor later. 
 The investor benefits by earning interest on his investments.
 
@@ -16,14 +16,16 @@ But in our approach all funds are transferred directly from the investor to the 
 
 ## Example
 
-Suppose Abhimanyu, a college student, wishes to raise money for buying a MacBook for his educational needs.
+* Suppose Abhimanyu, a college student, wishes to raise money for buying a MacBook for his educational needs.
 Mr. Gupta can choose to help him by paying 50% of the cost, at 3% interest per month. This helps Abhimanyu to complete the payment now, and repay Mr. Gupta later. 
 
-In this way, we aim to help many users raise funds for their
+* Abhimanyu can repay the loan in as many breaks as he wishes to.
+
+* In this way, we aim to help many users raise funds for their
 needs, get credit easily, and achieve their dreams! 
 Also we help investor to earn interest on his investment.
 
-It’s a win-win and secure situation for both parties.
+* It’s a win-win and secure situation for both parties.
 
 ## How it works
 We used solidity to write smart cotracts which was deployed to a test etherum network (Rinkbey).
@@ -31,7 +33,7 @@ To communicate to our contracts deployed on blockchain network from flutter we u
 
 All transactions are carried out securely using Ethereum Blockchain.
 
-[Video Demo](https://drive.google.com/file/d/107o8uuBDZLpXmdaBq4_GSIbNIrKR1AbF/view?usp=sharing)
+* [Video Demo](https://drive.google.com/file/d/107o8uuBDZLpXmdaBq4_GSIbNIrKR1AbF/view?usp=sharing)
 
 ## Screenshots
 
