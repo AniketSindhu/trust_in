@@ -10,6 +10,7 @@ import 'package:trust_in/pages/campignslist.dart';
 import 'package:trust_in/pages/createCampaign.dart';
 import 'package:trust_in/pages/login.dart';
 import 'package:trust_in/pages/myCampaign.dart';
+import 'package:trust_in/pages/MyInvestments.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:web3dart/credentials.dart';
 
@@ -214,7 +215,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                 Icons.monetization_on_outlined,
                                   'My Investments',
                                   (){
-                                    //TODO Navigate to my investment
+                                    Navigator.push(context, MaterialPageRoute(builder:(context){return MyInvestments(address: user.address,);}));
                                   }),
                             ])
                           ],

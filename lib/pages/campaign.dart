@@ -74,7 +74,7 @@ class _CampaignState extends State<Campaign> {
             (15).heightBox,
             Divider(color:Colors.grey[400]),
             DefaultTabController(
-              length: 2,
+              length: 1,
               child: TabBar(
                 onTap:(val){} ,
                 labelColor: Vx.red400,
@@ -83,17 +83,16 @@ class _CampaignState extends State<Campaign> {
                 unselectedLabelColor: Vx.gray400,
                 tabs: [
                   Tab(text: "Description",),
-                  Tab(text: "MileStones",),
                 ],
               ),
             ),
             (10).heightBox,
             DefaultTabController(
-              length: 2,
+              length: 1,
               child: TabBarView(
                 children:[
                   "${widget.campaignModel.campaignDescription}".text.overflow(TextOverflow.fade).xl.gray700.semiBold.make(),
-                  Column(
+/*                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MilestoneProgress(
@@ -109,7 +108,7 @@ class _CampaignState extends State<Campaign> {
                       (10).heightBox,
                       "3 milestones are completed".text.makeCentered()
                     ],
-                  )
+                  ) */
                 ]
               ),
             ).h(90),

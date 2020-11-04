@@ -113,6 +113,20 @@ class _ApprovalPageState extends State<ApprovalPage> {
                       .doc(widget.campaign.id.toString())
                       .update({'lastDate': DateTime.now(), 'isApproved': true});
 
+                  if (snap.data()['ownershipPercent'] + widget.campaign.ownedByInvestorTotal == 100){
+                    await FirebaseFirestore.instance
+                      .collection("campaigns")
+                      .doc(widget.campaign.id.toString())
+                      .update({'ownedByInvestorTotal': FieldValue.increment(snap.data()['ownershipPercent']),'showInList':false});
+                    }
+                  else{
+                    await FirebaseFirestore.instance
+                      .collection("campaigns")
+                      .doc(widget.campaign.id.toString())
+                      .update({'ownedByInvestorTotal': FieldValue.increment(snap.data()['ownershipPercent'])});    
+                  }
+
+
                   Fluttertoast.showToast(
                       msg:
                           "Approval accepted, the investment amount will reflect in your wallet in few moments",

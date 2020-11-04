@@ -18,10 +18,10 @@ class CampaignModel{
     return CampaignModel(
         campaignName: doc['campaignName'],
         publisherAddress: doc['publisherAddress'],
-        totalAmount: doc['totalAmount'],
+        totalAmount: doc['totalAmount'].toInt(),
         id: doc['CampaignId'],
         finished: doc['finished'],
-        ownedByInvestorTotal: doc['ownedByInvestorTotal'],
+        ownedByInvestorTotal: doc['ownedByInvestorTotal'].toInt(),
         ownership: doc['ownership'],
         campaignDescription: doc['campaignDescription'],
         image: doc['image'],

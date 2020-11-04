@@ -35,7 +35,7 @@ class _MyCampaignSingleState extends State<MyCampaignSingle> {
               label: 'Approvals',
             ),
           ]),
-      body: index==0?AllLedgers():ApprovalPage(campaign: widget.campaign,),
+      body: index==0?AllLedgers(widget.campaign):ApprovalPage(campaign: widget.campaign,),
     );
   }
 }
